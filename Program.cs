@@ -6,78 +6,81 @@ using System.Threading.Tasks;
 
 namespace ProyectoEstructuraDatos
 {
-      
-        public interface IEstructuraDeDatos
-        {
+
+    public interface IEstructuraDeDatos
+    {
         void AgregarDato(string dato);
         void EliminarDato(string dato);
         void MostrarDatos();
-        }
+    }
 
-        public class Program
+    public class Program
+    {
+        static void Main()
         {
-            static void Main()
-            {
             IEstructuraDeDatos estructuraActual = null;
+            bool salirPrograma = false;
 
-            while (true)
+            while (!salirPrograma)
             {
                 Menu.MostrarMenu();
                 string opcion1 = Console.ReadLine();
-                if (opcion1 == "5")
+
+                switch (opcion1)
                 {
-                    
-                    if (estructuraActual != null)
-                    {
-                        Console.WriteLine($"Seleccionaste {opcion1}. Puedes realizar operaciones en {estructuraActual.GetType().Name}.");
+                    case "A":
+                    case "B":
+                    case "C":
+                    case "D":
+                    case "E":
+                        estructuraActual = Menu.SeleccionarEstructura(opcion1);
 
-                        while (true)
+                        if (estructuraActual != null)
                         {
-                            MostrarOperacionesGrafos();
-                            string operacionGrafos = Console.ReadLine();
+                            Console.WriteLine($"Seleccionaste {opcion1}. Puedes realizar operaciones en {estructuraActual.GetType().Name}.");
 
-                            if (RealizarOperacionGrafos(estructuraActual, operacionGrafos))
+                            while (true)
                             {
-                                break;
+                                if (opcion1 == "E")  // Si es un grafo
+                                {
+                                    MostrarOperacionesGrafos();
+                                    string operacionGrafos = Console.ReadLine();
+
+                                    if (RealizarOperacionGrafos(estructuraActual, operacionGrafos))
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    MostrarOperaciones();
+                                    string operacion = Console.ReadLine();
+
+                                    if (RealizarOperacion(estructuraActual, operacion))
+                                    {
+                                        break;
+                                    }
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Opción no válida. Por favor, seleccione una estructura válida.");
-                    }
-                }
-            
-                else if (opcion1 == "6")
-                {
-                    Console.WriteLine("Saliendo del programa. ¡Hasta luego!");
-                    break;
-                }
-
-                estructuraActual = Menu.SeleccionarEstructura(opcion1);
-
-                if (estructuraActual != null)
-                {
-                    Console.WriteLine($"Seleccionaste {opcion1}. Puedes realizar operaciones en {estructuraActual.GetType().Name}.");
-
-                    while (true)
-                    {
-                        MostrarOperaciones();
-                        string operacion = Console.ReadLine();
-
-                        if (RealizarOperacion(estructuraActual, operacion))
+                        else
                         {
-                            break;
+                            Console.WriteLine("Opción no válida. Por favor, seleccione una estructura válida.");
                         }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Opción no válida. Por favor, seleccione una estructura válida.");
+                        break;
+
+                    case "F":
+                        Console.WriteLine("Saliendo del programa. ¡Hasta luego!");
+                        salirPrograma = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción no válida. Por favor, seleccione una opción del menú.");
+                        break;
                 }
             }
-
         }
+
         static void MostrarOperaciones()
         {
             Console.WriteLine("\nOperaciones:");
@@ -95,7 +98,8 @@ namespace ProyectoEstructuraDatos
             Console.WriteLine("3. Agregar Arista");
             Console.WriteLine("4. Eliminar Arista");
             Console.WriteLine("5. Mostrar Grafo");
-            Console.WriteLine("6. Salir");
+            Console.WriteLine("6. Cambiar De Estructura");
+            Console.WriteLine("7. Salir");
 
         }
         static bool RealizarOperacion(IEstructuraDeDatos estructura, string operacion1)
@@ -160,14 +164,17 @@ namespace ProyectoEstructuraDatos
                     estructura.MostrarDatos();
                     return false;
                 case "6":
+                    Console.WriteLine("Cambiando estructura.");
+                    return true;
+                case "7":
                     Console.WriteLine("Saliendo de la estructura actual.");
-                    return false;
+                    return true;
                 default:
                     Console.WriteLine("Opción no válida. Por favor, seleccione una operación válida.");
                     return false;
             }
         }
-    } 
+    }
 }
 
 
